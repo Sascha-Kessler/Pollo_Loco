@@ -32,4 +32,15 @@ class MovableObject {
     moveLeftAutomatic() {
         this.x -= this.speed
     }
+
+    animate(animationArray) {
+        setInterval(() => {
+        let i = this.currentImage % animationArray.length
+        let path = animationArray[i];
+        this.img = this.imageCache[path];
+        this.currentImage++;
+    }, 100);   
+    }
 }
+
+
