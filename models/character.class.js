@@ -14,7 +14,7 @@ class Character extends MovableObject {
     
 
     constructor() {
-        super().loadImage('img_pollo_locco/img/2_character_pepe/2_walk/W-21.png');
+        super().loadImage('img_pollo_locco/img/2_character_pepe/1_idle/idle/I-1.png');
         this.loadImages(this.imagesWalking); 
         this.animate();                  
     }
@@ -22,22 +22,25 @@ class Character extends MovableObject {
 
     animate() {
         setInterval(() => {
-            if (this.world.keyboard.RIGHT) {
+            if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
                 this.x += this.speed;
                 this.moveAnimation();
+                this.otherDirection = false;
             }
-            if (this.world.keyboard.LEFT) {
+            else {this.loadImage('img_pollo_locco/img/2_character_pepe/1_idle/idle/I-1.png')}
+            if (this.world.keyboard.LEFT && this.x > 0) {
                 this.x -= this.speed;
                 this.moveAnimation();
+                this.otherDirection = true;
             }
             if (this.world.keyboard.SPACE) {
                 this.y -= 50;
                 setTimeout(() => {
                     this.y += 50;
                 }, 500)
-                
-            }
-        
+            }  
+            
+            this.world.camera_x = -this.x + 100;
     }, 60);   
     }
 

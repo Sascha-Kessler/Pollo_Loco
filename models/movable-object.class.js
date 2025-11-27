@@ -8,6 +8,7 @@ class MovableObject {
     autoMove = false;
     imageCache = {};
     currentImage = 0;
+    otherDirection = false;
 
 
     loadImage(path) {
