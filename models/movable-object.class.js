@@ -9,6 +9,8 @@ class MovableObject {
     imageCache = {};
     currentImage = 0;
     otherDirection = false;
+    speedY = 0;
+    accelerationY = 1;
 
 
     loadImage(path) {
@@ -25,8 +27,25 @@ class MovableObject {
     }
 
     moveRight() {
-        console.log('Moving right');
+    this.x += this.speed;
+
+    // Nur laufen, wenn auf dem Boden und nicht mitten in einer Sprung-Anim
+    if (!this.isAboveGround() && !this.isJumpingAnimation) {
+        this.moveAnimation(this.imagesWalking);
     }
+
+    this.otherDirection = false;
+}
+
+moveLeft() {
+    this.x -= this.speed;
+
+    if (!this.isAboveGround() && !this.isJumpingAnimation) {
+        this.moveAnimation(this.imagesWalking);
+    }
+
+    this.otherDirection = true;
+}
 
 
     moveLeftAutomatic() {
@@ -41,6 +60,34 @@ class MovableObject {
         this.currentImage++;
     }, 100);   
     }
+
+    applyGravity() {
+    setInterval(() => {
+        if (this.isAboveGround() || this.speedY > 0) {
+            this.y -= this.speedY;
+            this.speedY -= this.accelerationY;
+        } else {
+            this.speedY = 0;
+            this.y = 90; // Bodenhöhe, falls du das so willst
+        }
+    }, 1000 / 25);
+}
+
+    isAboveGround() {
+        return this.y < 90;
+    }
+
+    jump() {
+    // nur springen, wenn auf dem Boden und keine Sprung-Animation läuft
+    if (this.isAboveGround() || this.isJumpingAnimation) return;
+    if (this.world.keyboard.LEFT) {
+                    this.otherDirection = true;
+                } else if (this.world.keyboard.RIGHT) {
+                    this.otherDirection = false;
+                }
+    this.speedY = 20;
+    this.startJumpAnimation();
+}
 }
 
 

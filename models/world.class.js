@@ -18,6 +18,12 @@ class World {
 
     setWorld() {
         this.character.world = this;
+         this.level.enemies.forEach(e => {
+                e.world = this;
+                if (e instanceof Endboss) {
+                    e.setPositionUsingWorld();
+                }
+        });
     }
 
     draw() {
@@ -32,6 +38,7 @@ class World {
         this.addObjectsToMap(this.level.clouds);
         this.addToMap(this.character);
         this.addObjectsToMap(this.level.enemies);
+        this.addObjectsToMap(this.level.bottles);
 
         this.ctx.translate(-this.camera_x, 0);
 
@@ -48,13 +55,14 @@ class World {
     }
 
     addToMap(movableObject) {
+        this.ctx.save();
         if (movableObject.otherDirection) {
             this.flipImage(movableObject);
         }
-        this.ctx.drawImage(movableObject.img, movableObject.x, movableObject.y, movableObject.width, movableObject.height);
-        if (movableObject.otherDirection) {
+        else {
             this.flipImageBack(movableObject);
         }
+        this.ctx.restore();
     }
 
     updateObjects(objects) {
@@ -66,15 +74,14 @@ class World {
     } 
 
     flipImage(movableObject) {
-        this.ctx.save();
-        this.ctx.translate(movableObject.width, 0);
+        this.ctx.translate(movableObject.x + movableObject.width, movableObject.y);
         this.ctx.scale(-1, 1);
-        movableObject.x = movableObject.x * -1;
+        this.ctx.drawImage(movableObject.img, 0, 0, movableObject.width, movableObject.height);
+        
     }
 
     flipImageBack(movableObject) {
-        this.ctx.restore();
-        movableObject.x = movableObject.x * -1;
+        this.ctx.drawImage(movableObject.img, movableObject.x, movableObject.y, movableObject.width, movableObject.height);
     }
 
     
