@@ -10,7 +10,7 @@ class MovableObject {
     currentImage = 0;
     otherDirection = false;
     speedY = 0;
-    accelerationY = 1;
+    accelerationY = 1.8;
 
 
     loadImage(path) {
